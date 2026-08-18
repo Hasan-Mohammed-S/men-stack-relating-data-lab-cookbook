@@ -16,9 +16,13 @@ const addUserToViews = require('./middleware/addUserToViews');
 
 // CONTROLLERS
 const authCtrl = require('./controllers/authCtrl');
+const applicationsCtrl = require('./controllers/applicationsCtrl');
 
 // Set the port from environment variable or default to 3000
 const port = process.env.PORT ? process.env.PORT : '3000';
+
+const path = require('path');
+
 
 // Middleware to parse URL-encoded data from forms
 app.use(express.urlencoded({ extended: false }));
@@ -26,20 +30,29 @@ app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 // Morgan for logging HTTP requests
 app.use(morgan('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
-  })
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true,
+        store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+    })
 );
 
 app.use(addUserToViews);
 
 // PUBLIC ROUTES
-app.get('/', async (req, res) => {
-  res.render('index.ejs');
+app.get('/', (req, res) => {
+    // Check if the user is signed in
+    if (req.session.user) {
+        // Redirect signed-in users to their applications index
+        res.redirect(`/users/${req.session.user._id}/applications`);
+    } else {
+        // Show the homepage for users who are not signed in
+        res.render('index.ejs');
+    }
 });
 
 app.get('/auth/sign-up', authCtrl.signup);
@@ -53,10 +66,19 @@ app.use(isSignedIn);
 // PRIVATE ROUTES
 app.get('/auth/sign-out', authCtrl.signout);
 
-app.get('/protected', async (req, res) => {
-  res.send(`You are logged in as ${req.session.user.username}`);
-});
+// Applications
+app.get('/users/:userId/foods', applicationsCtrl.index);
+app.get('/users/:userId/foods/new', applicationsCtrl.new);
+app.post('/users/:userId/foods', applicationsCtrl.create);
+app.get('/users/:userId/foods/:itemId', applicationsCtrl.show);
+app.delete('/users/:userId/foods/:itemId', applicationsCtrl.delete);
+app.get('/users/:userId/foods/:itemId/edit', applicationsCtrl.edit);
+app.put('/users/:userId/foods/:itemId', applicationsCtrl.update);
+
+
+
+
 
 app.listen(port, () => {
-  console.log(`The express app is ready on port ${port}!`);
+    console.log(`The express app is ready on port ${port}!`);
 });
