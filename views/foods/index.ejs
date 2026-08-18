@@ -8,9 +8,7 @@
 </head>
 
 <body>
-    <%- include('./partials/_navbar.ejs') %>
-
-        <h1>Welcome to my WebSite</h1>
-
-
+    <%- include('../partials/_navbar.ejs') %>
+        <h1>Welcome to my Pantry</h1>
+        <a href="/users/<%= user._id %>/foods/new">Add a new food</a>
 </body>

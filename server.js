@@ -11,17 +11,21 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo').MongoStore;
 const methodOverride = require('method-override');
 const morgan = require('morgan');
-const isSignedIn = require('./middleware/isSignedIn');
-const addUserToViews = require('./middleware/addUserToViews');
+const isSignedIn = require('./middleware/is-signed-in.js');
+const passUserToView = require('./middleware/pass-user-to-view.js');
 
 // CONTROLLERS
 const authCtrl = require('./controllers/authCtrl');
-const applicationsCtrl = require('./controllers/applicationsCtrl');
+const foodsController = require('./controllers/foodsController.js');
 
 // Set the port from environment variable or default to 3000
-const port = process.env.PORT ? process.env.PORT : '3000';
+const port = process.env.PORT ? process.env.PORT : '3010';
+
 
 const path = require('path');
+
+
+
 
 
 // Middleware to parse URL-encoded data from forms
@@ -41,14 +45,14 @@ app.use(
     })
 );
 
-app.use(addUserToViews);
+app.use(passUserToView);
 
 // PUBLIC ROUTES
 app.get('/', (req, res) => {
     // Check if the user is signed in
     if (req.session.user) {
         // Redirect signed-in users to their applications index
-        res.redirect(`/users/${req.session.user._id}/applications`);
+        res.redirect(`/users/${req.session.user._id}/foods`);
     } else {
         // Show the homepage for users who are not signed in
         res.render('index.ejs');
@@ -67,13 +71,13 @@ app.use(isSignedIn);
 app.get('/auth/sign-out', authCtrl.signout);
 
 // Applications
-app.get('/users/:userId/foods', applicationsCtrl.index);
-app.get('/users/:userId/foods/new', applicationsCtrl.new);
-app.post('/users/:userId/foods', applicationsCtrl.create);
-app.get('/users/:userId/foods/:itemId', applicationsCtrl.show);
-app.delete('/users/:userId/foods/:itemId', applicationsCtrl.delete);
-app.get('/users/:userId/foods/:itemId/edit', applicationsCtrl.edit);
-app.put('/users/:userId/foods/:itemId', applicationsCtrl.update);
+app.get('/users/:userId/foods', foodsController.index);
+app.get('/users/:userId/foods/new', foodsController.new);
+// app.post('/users/:userId/foods', foodsController.create);
+// app.get('/users/:userId/foods/:itemId', foodsController.show);
+// app.delete('/users/:userId/foods/:itemId', foodsController.delete);
+//app.get('/users/:userId/foods/:itemId/edit', foodsController.edit);
+//app.put('/users/:userId/foods/:itemId', foodsController.update);
 
 
 

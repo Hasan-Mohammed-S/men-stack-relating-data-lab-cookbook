@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 
 const foodSchema = new mongoose.Schema({
     foods: {
-        property: name,
-        type: String,
-        required: true,
+        name: {
+            type: String,
+            required: true,
+        }
     }
 });
 
@@ -18,8 +19,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    pantry: // YOU DO: embed foodSchema here
+    pantry: [foodSchema]
 });
+
 const User = mongoose.model('User', userSchema);
 
 // export it
