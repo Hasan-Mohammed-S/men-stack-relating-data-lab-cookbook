@@ -6,18 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
 
-    <title>Add a New App</title>
+    <title>Editing Food </title>
 </head>
 
 <body>
     <%- include('../partials/_navbar.ejs') %>
-        <h1>Add a New foods</h1>
+        <h1>Editing
+            <%= food.name%>
+        </h1>
 
-        <form action="/users/<%=user._id%>/foods" method="POST">
+        <form action="/users/<%=user._id%>/foods/<%=food._id%>?_method=PUT" method="POST">
             <label for="name">Food Name:</label>
-            <input type="text" name="name" id="name" />
+            <input type="text" name="name" id="name" value="<%=food.name%>" />
 
-            <button type="submit">Add the Food</button>
+            </textarea>
+
+            <button type="submit">Add App</button>
         </form>
 </body>
 </htmlt>

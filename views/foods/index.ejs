@@ -11,4 +11,13 @@
     <%- include('../partials/_navbar.ejs') %>
         <h1>Welcome to my Pantry</h1>
         <a href="/users/<%= user._id %>/foods/new">Add a new food</a>
+        <ul>
+            <% pantry.forEach((food)=>{ %>
+                <a href="/users/<%= user._id %>/foods/<%= food._id %>">
+                    <li>
+                        <%= food.name %>
+                    </li>
+                </a>
+                <% }) %>
+        </ul>
 </body>

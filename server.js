@@ -73,11 +73,11 @@ app.get('/auth/sign-out', authCtrl.signout);
 // Applications
 app.get('/users/:userId/foods', foodsController.index);
 app.get('/users/:userId/foods/new', foodsController.new);
-// app.post('/users/:userId/foods', foodsController.create);
-// app.get('/users/:userId/foods/:itemId', foodsController.show);
-// app.delete('/users/:userId/foods/:itemId', foodsController.delete);
-//app.get('/users/:userId/foods/:itemId/edit', foodsController.edit);
-//app.put('/users/:userId/foods/:itemId', foodsController.update);
+app.post('/users/:userId/foods', foodsController.create);
+app.get('/users/:userId/foods/:foodId', foodsController.show);
+app.delete('/users/:userId/foods/:foodId', foodsController.delete);
+app.get('/users/:userId/foods/:foodId/edit', foodsController.edit);
+app.put('/users/:userId/foods/:foodId', foodsController.update);
 
 
 
