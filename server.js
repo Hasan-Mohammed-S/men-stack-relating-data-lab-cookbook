@@ -17,6 +17,7 @@ const passUserToView = require('./middleware/pass-user-to-view.js');
 // CONTROLLERS
 const authCtrl = require('./controllers/authCtrl');
 const foodsController = require('./controllers/foodsController.js');
+const usersController = require('./controllers/usersController.js')
 
 // Set the port from environment variable or default to 3000
 const port = process.env.PORT ? process.env.PORT : '3010';
@@ -79,9 +80,8 @@ app.delete('/users/:userId/foods/:foodId', foodsController.delete);
 app.get('/users/:userId/foods/:foodId/edit', foodsController.edit);
 app.put('/users/:userId/foods/:foodId', foodsController.update);
 
-
-
-
+// Users
+app.get('/users', usersController.index);
 
 app.listen(port, () => {
     console.log(`The express app is ready on port ${port}!`);
